@@ -1,0 +1,131 @@
+:root{
+    --board-length: calc(100vh - 46px);
+    --secColor: #ecdab9;
+}
+
+
+
+#background{
+    background-image: url("./res/chess-png-3-edit.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+#init{
+    height: 100vh;
+    place-items: center;
+}
+
+#switch-btn{
+   /* padding: 15px; */
+   font-size: 2em;
+}
+
+
+
+
+#main{
+    height: 100vh;
+}
+
+.cm-chessboard .pieces > g{
+    cursor: pointer !important;
+}
+
+#peice-row{
+    display: flex;
+}
+
+.peice-row-select{
+    cursor: pointer;
+    transition: all 1s;
+}
+
+.peice-row-select:nth-of-type(even){
+    background-color: #c5a076;
+
+}
+
+.peice-row-select:nth-of-type(odd){
+    background-color: var(--secColor);
+}
+
+.peice-row-select:hover{
+    transform: scale(1.1);
+}
+
+
+#modal{
+            position:absolute;
+            top: 50%;
+            font-size: 2em;
+            border:2px solid red;
+            border-radius: 5px;
+}
+
+#main-sub{
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+
+.main-sub-menu{
+    display: grid;
+    /* grid: repeat(3,1fr)/1fr; */
+    row-gap: 20px;
+}
+
+#board{
+    height: var(--board-length);
+    width: var(--board-length);
+}
+
+#board-container{
+    display: flex;
+    justify-content: center;
+}
+
+#hero-img{
+    width: 120%;
+    user-select: none;
+}
+
+#menu-form{
+    grid-area: 1/1/3/2;
+}
+
+.main-sub-menu .btn, .main-sub-menu input{
+    position: relative;
+    animation: 1s slide-in;
+}
+
+h1{
+    cursor:pointer;
+    user-select: none;
+}
+
+
+
+
+.input-form{
+    color: darkslateblue;
+    border: 3px solid;
+
+}
+
+div#game-layout{
+    display: grid;
+    place-items: center;
+}
+
+@keyframes slide-in {
+    from{
+        left: 80px;
+        opacity: 0;
+    }
+    to {
+        left : 0;
+        opacity: 1;
+    }
+}
