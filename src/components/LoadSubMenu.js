@@ -23,7 +23,6 @@ function LoadSubMenu({action}){
             if(!gameSession.initial) return;
             if(!gameSession.history) return;
             if(!window.game.validate_fen(gameSession.initial).valid){
-                alert("Invalid Game State");
                 return;
             }
         }catch(error){
@@ -31,7 +30,6 @@ function LoadSubMenu({action}){
         }
         console.log(gameSession);
 
-        alert("valid");
         window.setMenu(<Game position={gameSession.initial} watch={true} moves={gameSession.history}/>)
     }
     function handleLoadInput(e){
@@ -40,11 +38,9 @@ function LoadSubMenu({action}){
         try{
             gameState=JSON.parse(gameState);
             if(!gameState.position) {
-                alert("Invalid GameState");
                 return;
             }
             if(!window.game.validate_fen(gameState.position).valid){
-                alert("Invalid Game State");
                 return;
             }
         }catch(error){

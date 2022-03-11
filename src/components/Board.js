@@ -4,9 +4,11 @@ import "cm-chessboard/assets/styles/cm-chessboard.css";
 import Promotion from "./Promotion";
 import react from "react";
 import DialogBox from "./DialogBox";
+import {aiMove} from "js-chess-engine";
 
 window.Chessboard = Chessboard;
 window.chess = Chess;
+window.aiMove=aiMove;
 
 
 const game = new Chess();
@@ -33,6 +35,10 @@ class Board extends react.Component{
         let {gameState} = this.props;
         console.log(gameState);
         let {white,position,mode,watch,moves} = gameState;
+        let twoPlayer=(mode == "pvc")?false:true;
+        if(!twoPlayer){
+            let ai = (white == "hu")?"b":"w";
+        }
         let iniP="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         console.log(position);
         let counter;
@@ -41,6 +47,8 @@ class Board extends react.Component{
         }
         updatePlayer=updatePlayer.bind(this);
         pawnPromotion=pawnPromotion.bind(this);
+
+
         game.load((position==="start")?iniP:position);
         game.startingPosition = (position==="start")?iniP:position;
         game.mode=mode;
@@ -90,7 +98,16 @@ class Board extends react.Component{
                             console.log("test correct")
                             pawnPromotion(valid);
                         }else{
-                        updatePlayer();
+                            if(twoPlayer)
+                            updatePlayer();
+                            else{
+
+                                setTimeout(()=>{
+                                    if(!gameEnded())
+                                    computerPlay();
+                                    updatePlayer();
+                                },1100);
+                            }
                         }
                         console.log(valid);
 
@@ -106,9 +123,25 @@ class Board extends react.Component{
 
         
         if(!watch){
+            if(white === "hu")
             updatePlayer();
+            else{
+                computerPlay();
+                updatePlayer();
+            }
         }else{
             setTimeout(watchMoves,1000);
+        }
+
+        function computerPlay() {
+            board.disableMoveInput();
+            let aiPlay = aiMove(game.fen());
+            let arr= Object.keys(aiPlay).concat(Object.values(aiPlay));
+            game.move(arr[0].toLowerCase()+arr[1].toLowerCase(),{sloppy:true});
+            setTimeout(()=>{
+                board.setPosition(game.fen());
+            },300);
+            console.log(arr);
         }
 
         function watchMoves(){
@@ -224,4 +257,5 @@ class Board extends react.Component{
         return <><div id="board" ></div><DialogBox {...this.state.dialogBox}/></>
     }
 }
+
 export default Board;
