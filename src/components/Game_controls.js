@@ -10,6 +10,7 @@ class GameControls extends react.Component{
 
 
     unDo(){
+        window.Board.setState({dialogBox:{visbility:false}});
         window.game.undo();
         window.board.setPosition(window.game.fen());
         window.updatePlayer();
@@ -19,6 +20,7 @@ class GameControls extends react.Component{
         window.game.reset();
         window.board.setPosition("start");
         window.updatePlayer();
+        window.Board.setState({dialogBox:{visbility:false}});
     }
 
     saveGame(){

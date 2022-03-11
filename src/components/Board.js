@@ -13,6 +13,14 @@ const game = new Chess();
 
 window.game=game;
 
+function EndDisplay({children}){
+    return <div style={{
+        display:"flex",
+        flexDirection:"column",
+        justifyContent:"center"
+    }}>{children}</div>
+}
+
 class Board extends react.Component{
     
     constructor(props){
@@ -31,6 +39,7 @@ class Board extends react.Component{
         if(moves){
             counter=0;
         }
+        updatePlayer=updatePlayer.bind(this);
         pawnPromotion=pawnPromotion.bind(this);
         game.load((position==="start")?iniP:position);
         game.startingPosition = (position==="start")?iniP:position;
@@ -68,8 +77,6 @@ class Board extends react.Component{
                     // return `true`, if input is accepted/valid, `false` aborts the interaction, the piece will not move
                     return true;
                 case INPUT_EVENT_TYPE.moveDone:
-
-                    // const valid= game.move({from:event.squareFrom,to:event.squareTo});
 
                     const valid= game.move(event.squareFrom+event.squareTo,{sloppy:true});
                     
@@ -115,20 +122,23 @@ class Board extends react.Component{
             setTimeout(watchMoves,(Math.ceil(Math.random()*3)+1)*1000);
         }
 
-        /* function checkMate(){
+        function gameEnded(){
             if(game.in_checkmate()){
                 return {loser:game.turn(),type:"checkmate"};
-            };
+            }
             if(game.in_stalemate()){
                 return {type:"stalemate"};
             }
-            if(game.in_threefold_repition()){
+            if(game.in_threefold_repetition()){
                 return {type:"tfr"};
             }
             if(game.insufficient_material()){
                 return {type:"ism"}
             }
-        } */
+            return false;
+        }
+
+        console.log(gameEnded());
 
 
         window.updatePlayer = updatePlayer;
@@ -137,6 +147,28 @@ class Board extends react.Component{
             const p = game.turn();
             const bar = new Map([['b',COLOR.black],['w',COLOR.white]]);
             board.enableMoveInput(moveHandler,bar.get(p));
+            let end = gameEnded();
+            if(end){
+                board.disableMoveInput();
+                let endR;
+                switch (end.type) {
+                    case "checkmate":
+                        const winner=(end.loser=="b")?"White":"Black";
+                        endR=<><h1>Checkmate!</h1><div>{winner} Wins</div></>
+                        break;
+                    case "stalemate":
+                        endR=<><h1>StaleMate!</h1></>
+                        break;
+                    case "tfr":
+                        endR=<><h1>Three fold repetition</h1><div>Draw due to three fold repetition</div></>
+                        break;
+                    default:
+                        endR=<><h1>Draw!</h1><div>Draw due to insufficient material</div></>
+                        break;
+                }
+                this.setState({dialogBox:{visible:true,text:<EndDisplay>{endR}</EndDisplay>}});
+                
+            }
         }
 
         function checkForCastle(san){
