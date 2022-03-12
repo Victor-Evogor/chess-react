@@ -129,3 +129,37 @@ div#game-layout{
         opacity: 1;
     }
 }
+
+
+#old-browser #main-sub{
+    display: block;
+}
+
+#old-browser #main-sub .col-6{
+    width: 80%;
+}
+
+#old-browser #main-sub #main-menu{
+    margin-top: 0 !important;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#old-browser #game-layout #board-container #board{
+    width: 80%;
+}
+
+#old-browser #game-layout{
+    padding: 0;
+}
+
+
+#old-browser #game-layout #game-controls{
+    width: 300px;
+    justify-content: space-between;
+}
+
+#old-browser #game-layout #game-controls .btn{
+    padding:  0 4px !important;
+}

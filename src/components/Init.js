@@ -7,7 +7,7 @@ import react from "react";
 
 class Init extends react.Component{
 
-  componentWillMount(){
+  componentDidMount(){
     document.onkeydown = (key)=>{
       if(key.key =="Enter"){
         handleClick()
@@ -40,13 +40,20 @@ async function enterFullScreen(){
 }
 
 function enterLandScape() {
+  if(window.screen && window.screen.orientation){
     if(window.screen.orientation.type == "portrait-primary" || window.screen.orientation.type == "portrait-secondary"){
-        try{
-          window.screen.orientation.lock("landscape");
-        }catch(e){
+      try{
+        window.screen.orientation.lock("landscape");
+      }catch(e){
 
-        }
+      }
     }
+  }else{
+    if(window.innerWidth < 400)
+    document.body.id="old-browser";
+    console.log("You won't have the best experience because of your browser ")
+  }
+    
 }
 
 function startMusic() {

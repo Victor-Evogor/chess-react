@@ -6,6 +6,18 @@ function Info ({text}){
     return  <div>{text}</div>
 }
 
+function copy(txt){
+    let area = document.getElementById("txt");
+    area.value=txt;
+    area.focus();
+    area.select();
+    try {
+        document.execCommand("copy");
+    } catch (error) {
+        console.log("Your Browser is bullshit");
+    }    
+}
+
 class GameControls extends react.Component{
 
 
@@ -13,7 +25,7 @@ class GameControls extends react.Component{
         window.Board.setState({dialogBox:{visbility:false}});
         window.game.undo();
         window.board.setPosition(window.game.fen());
-        window.updatePlayer();
+        window.updatePlayer(true);
     }
 
     restart(){
@@ -25,26 +37,27 @@ class GameControls extends react.Component{
 
     saveGame(){
 
-        //Todo: add copytoclipboard for some browsers
 
         let state=JSON.stringify({position:window.game.fen(),white:window.game.white,mode:window.game.mode});
-        try{
-        navigator.clipboard.writeText(state);
-        }catch(e){
-            alert(e);
-            alert(Navigator.clipboard);
-        }
+        if(navigator.clipboard)
+            navigator.clipboard.writeText(state);
+        else
+            copy(state);
+        
         console.log(state);
         window.Board.setState({dialogBox:{visible:true,text:<Info text={"Game State Copied To ClipBoard"}/>}});
         setTimeout(()=>window.Board.setState({dialogBox:false}),2000);
     }
 
+    
+
     saveSession(){
-        //Todo: add copytoclipboard for some browsers
         const session={history:window.game.history(),initial:window.game.startingPosition}
         console.log(session);
-
-        navigator.clipboard.writeText(JSON.stringify(session));
+        if(navigator.clipboard)
+            navigator.clipboard.writeText(JSON.stringify(session));
+        else
+            copy(JSON.stringify(session));
         window.Board.setState({dialogBox:{visible:true,text:<Info text={"Game Session Copied To ClipBoard!"}/>}});
         setTimeout(()=>window.Board.setState({dialogBox:false}),2000);
     }

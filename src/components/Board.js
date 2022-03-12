@@ -36,8 +36,9 @@ class Board extends react.Component{
         console.log(gameState);
         let {white,position,mode,watch,moves} = gameState;
         let twoPlayer=(mode == "pvc")?false:true;
+        let ai;
         if(!twoPlayer){
-            let ai = (white == "hu")?"b":"w";
+            ai = (white == "hu")?"b":"w";
         }
         let iniP="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         console.log(position);
@@ -50,7 +51,7 @@ class Board extends react.Component{
 
 
         game.load((position==="start")?iniP:position);
-        game.startingPosition = (position==="start")?iniP:position;
+        game.startingPosition = (position === "start")?iniP:position;
         game.mode=mode;
         game.white=white;
         const foo = new Map([["hu",COLOR.white],["ai",COLOR.black]]);
@@ -86,7 +87,7 @@ class Board extends react.Component{
                     return true;
                 case INPUT_EVENT_TYPE.moveDone:
 
-                    const valid= game.move(event.squareFrom+event.squareTo,{sloppy:true});
+                    const valid = game.move(event.squareFrom+event.squareTo,{sloppy:true});
                     
                     // return true, if input is accepted/valid, `false` takes the move back
                     if(valid){
@@ -176,9 +177,15 @@ class Board extends react.Component{
 
         window.updatePlayer = updatePlayer;
 
-        function updatePlayer(){
+        function updatePlayer(undo=false){
             const p = game.turn();
             const bar = new Map([['b',COLOR.black],['w',COLOR.white]]);
+            if(undo && mode == "pvc"){
+                if(game.turn() == ai){
+                    computerPlay();
+                    updatePlayer();
+                }
+            }else
             board.enableMoveInput(moveHandler,bar.get(p));
             let end = gameEnded();
             if(end){
@@ -248,7 +255,6 @@ class Board extends react.Component{
                 updatePlayer();
             }
         }
-
     }
 
     
