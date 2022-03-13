@@ -180,12 +180,6 @@ class Board extends react.Component{
         function updatePlayer(undo=false){
             const p = game.turn();
             const bar = new Map([['b',COLOR.black],['w',COLOR.white]]);
-            if(undo && mode == "pvc"){
-                if(game.turn() == ai){
-                    computerPlay();
-                    updatePlayer();
-                }
-            }else
             board.enableMoveInput(moveHandler,bar.get(p));
             let end = gameEnded();
             if(end){

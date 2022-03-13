@@ -24,8 +24,10 @@ class GameControls extends react.Component{
     unDo(){
         window.Board.setState({dialogBox:{visbility:false}});
         window.game.undo();
+        if(window.game.mode === "pvc")
+            window.game.undo();
         window.board.setPosition(window.game.fen());
-        window.updatePlayer(true);
+        window.updatePlayer();
     }
 
     restart(){
@@ -36,8 +38,6 @@ class GameControls extends react.Component{
     }
 
     saveGame(){
-
-
         let state=JSON.stringify({position:window.game.fen(),white:window.game.white,mode:window.game.mode});
         if(navigator.clipboard)
             navigator.clipboard.writeText(state);
