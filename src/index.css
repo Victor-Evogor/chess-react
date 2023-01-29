@@ -163,3 +163,16 @@ div#game-layout{
 #old-browser #game-layout #game-controls .btn{
     padding:  0 4px !important;
 }
+
+#attribution{
+    position: fixed;
+    bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 1.5rem;
+}
+
+#game-layout{
+    z-index: 100000;
+    position: relative;
+}
